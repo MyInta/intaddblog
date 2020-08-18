@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.inta.intaddblog.mapper.TagMapper">
+    <select id="findByName" resultType="cn.inta.intaddblog.po.Tag"></select>
+    <select id="findTop" resultType="cn.inta.intaddblog.po.Tag"></select>
+
+    <select id="findById" resultType="cn.inta.intaddblog.po.Tag">
+        SELECT * FROM tag t WHERE t.id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.inta.intaddblog.mapper.UserMapper">
+
+    <resultMap id="User" type="cn.inta.intaddblog.po.User">
+        <id property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="avatar" column="avatar"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 表查询字段 -->
+    <sql id="simpleMessage">
+        id, nickname, username, email, avatar, create_time, update_time
+    </sql>
+
+    <select id="findByUsernameAndPassword" resultMap="User">
+        SELECT * FROM user u WHERE u.username = #{username} and u.password = #{password}
+    </select>
+
+    <select id="findUserById" resultMap="User">
+        SELECT
+        <include refid="simpleMessage"/>
+        FROM User user WHERE user.id = #{user_id}
+    </select>
+
+</mapper>

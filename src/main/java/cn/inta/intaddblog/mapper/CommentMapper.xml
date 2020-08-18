@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.inta.intaddblog.mapper.CommentMapper">
+
+    <resultMap id="Comment" type="cn.inta.intaddblog.po.Comment">
+        <id property="id" column="id"/>
+        <result property="username" column="name"/>
+        <result property="email" column="email"/>
+        <result property="blogID" column="blogID"/>
+        <result property="createTime" column="createTime"/>
+        <result property="adminRight" column="adminRight"/>
+        <result property="content" column="content"/>
+        <result property="parentID" column="parentID"/>
+    </resultMap>
+
+    <!-- 表查询字段 -->
+    <sql id="allCommentColumns">
+        id, name, email, blogID, createTime, adminRight, content, parentID
+    </sql>
+
+    <insert id="saveComment" parameterType="cn.inta.intaddblog.po.Comment">
+      INSERT INTO comment(name, email, blogID, createTime, adminRight, content, parentID) INTO
+      VALUES (#{name},#{email},#{blogID},#{createTime},#{adminRight},#{content},#{parentID})
+    </insert>
+
+    <update id="updatePid">
+        UPDATE comment SET parentID = #{parentID}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM comment WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByPid">
+        DELETE FROM comment WHERE parentID = #{parentID}
+    </delete>
+
+    <select id="findIdsByBlogId" resultType="java.lang.Integer">
+        SELECT id FROM comment WHERE  blogID = #{bid}
+    </select>
+
+    <select id="findByBlogId" resultMap="Comment">
+        SELECT
+        <include refid="allCommentColumns"/>
+        FROM comment WHERE blogID = #{bid} ORDER BY createTime ASC
+    </select>
+
+    <select id="findByPid" resultType="cn.inta.intaddblog.po.Comment">
+        SELECT id,name, email, blogID, createTime, adminRight, content, parentID
+        FROM comment WHERE id != parentID and parentID = #{parentID}
+    </select>
+
+    <select id="list" resultType="cn.inta.intaddblog.po.Comment">
+
+    </select>
+</mapper>

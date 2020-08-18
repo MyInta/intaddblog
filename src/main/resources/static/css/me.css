@@ -1,0 +1,190 @@
+/*----------设置背景图片-----------*/
+
+body {
+    background: url("../img/bg.png");
+}
+/*-------设置内边距为相对值 em 以及最高优先级 !important-------*/
+
+.m-padded-mini {
+    padding: 0.2em !important;
+}
+.m-padded-tiny {
+    padding: 0.3em !important;
+}
+.m-padded {
+    padding: 1em !important;
+}
+
+/*-----设置表格内上下的内边距由小到大mini->massive------*/
+
+.m-padded-tb-mini {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+}
+.m-padded-tb-tiny {
+    padding-top: 0.3em !important;
+    padding-bottom: 0.3em !important;
+}
+.m-padded-tb-small {
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
+}
+.m-padded-tb {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+.m-padded-tb-large {
+    padding-top: 2em !important;
+    padding-bottom: 2em !important;
+}
+.m-padded-tb-big {
+    padding-top: 3em !important;
+    padding-bottom: 3em !important;
+}
+.m-padded-tb-huge {
+    padding-top: 4em !important;
+    padding-bottom: 4em !important;
+}
+.m-padded-tb-massive {
+    padding-top: 5em !important;
+    padding-bottom: 5em !important;
+}
+
+/*------左右内边距------*/
+
+.m-padded-lr-responsive {
+    padding-left: 4em !important;
+    padding-right: 4em !important;
+}
+
+/*-------设置文本 文字大小 字母间距  行高（行间距离）-----*/
+
+.m-text {
+    font-weight: 300 !important;
+    letter-spacing: 1px !important;
+    line-height: 1.8;
+}
+.m-text-thin {
+    font-weight: 300 !important;
+}
+.m-text-spaced {
+    letter-spacing: 1px !important;
+}
+.m-text-lined {
+    line-height: 1.8;
+}
+
+/*-----外边距margin------*/
+
+.m-margin-top-small {
+    margin-top: 0.5em !important;
+}
+.m-margin-top {
+    margin-top: 1em !important;
+}
+.m-margin-top-large {
+    margin-top: 2em !important;
+}
+
+.m-margin-tb-tiny {
+    margin-top: 0.3em !important;
+    margin-bottom: 0.3em !important;
+}
+
+.m-margin-bottom-small {
+    margin-bottom: 0.5em !important;
+
+}
+
+/*-----透明度opacity------*/
+
+.m-opacity-mini {
+    opacity: 0.8 !important;
+}
+.m-opacity-tiny {
+    opacity: 0.6 !important;
+}
+
+/*------元素生成框的类型display------*/
+
+.m-inline-block {
+    display: inline-block !important;
+}
+
+/*-----container----------*/
+
+.m-container-small {
+    max-width: 60em !important;
+    margin: auto !important;
+}
+.m-container {
+    max-width: 72em !important;
+    margin: auto !important;
+}
+
+/*------添加阴影shadow
+    Firefox: -moz-
+    Chrome, Safari: -webkit-
+    Opera: -o-
+    IE: -ms-
+    ------*/
+
+.m-shadow-small {
+    -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    -moz-box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/*------元素定位类型position---*/
+
+.m-right-top {
+    position: absolute;
+    top:0;
+    right: 0;
+}
+.m-right-bottom {
+    bottom: 0 !important;
+    right: 0 !important;
+}
+.m-fixed {
+    position: fixed !important;
+    z-index: 10 !important;
+}
+
+
+/*-----颜色color-----*/
+
+.m-black {
+    color: #333 !important;
+}
+.m-teal {
+    color: #00B5AD !important;
+}
+
+/*-----默认情况下是pc端 不展示手机端界面-----*/
+
+.m-mobile-show {
+    display: none !important;
+}
+
+/*-----针对不同的屏幕尺寸设置不同的样式 小于max-width值就执行修改样式-----*/
+
+@media screen and (max-width: 768px){
+    .m-mobile-hide {
+        display: none !important;
+    }
+    .m-mobile-show {
+        display: block !important;
+    }
+    .m-padded-lr-responsive {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .m-mobile-lr-clear {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .m-mobile-wide {
+        width: 100% !important;
+    }
+}

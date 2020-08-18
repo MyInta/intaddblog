@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.inta.intaddblog.mapper.BlogMapper">
+
+    <resultMap id="Blog" type="cn.inta.intaddblog.po.Blog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="type" column="type"/>
+        <result property="views" column="views"/>
+        <result property="tags" column="tags"/>
+        <result property="comments" column="comments"/>
+        <result property="pictureUrl" column="picture_url"/>
+        <result property="recommendRight" column="recommend_right"/>
+        <result property="reprintRight" column="reprint_right"/>
+        <result property="appreciationRight" column="appreciation_right"/>
+        <result property="commentRight" column="comment_right"/>
+        <result property="property" column="property"/>
+        <result property="state" column="state"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <!-- 表查询字段 -->
+    <sql id="allColumns">
+        id, title, summary, content, create_time, type, views, tags, comments, picture_url,
+        recommend_right, reprint_right, appreciation_right, comment_right, property, state, user_id
+    </sql>
+
+    <select id="findTop" resultMap="Blog">
+        SELECT <include refid="allColumns"/> FROM blog LIMIT #{page},#{size}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM blog;
+    </select>
+
+    <select id="findByQuery" resultMap="Blog">
+        SELECT b FROM blog b
+        WHERE b.title LIKE CONCAT('%', #{query}, '%')
+        OR b.content LIKE CONCAT('%', #{query}, '%')
+        LIMIT #{page},#{size}
+    </select>
+
+    <!--插入博客数据-->
+    <insert id="insertBlog" parameterType="map">
+        INSERT INTO
+        <include refid="allColumns"/>
+        VALUES (
+        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{comments},#{pictureUrl},
+        #{recommendRight},#{reprintRight},#{appreciationRight},#{commentRight},#{property},#{state}
+        )
+    </insert>
+    <insert id="addBlog" parameterType="Blog">
+        INSERT INTO blog(
+        id,title,summary,content,create_time,type,views,tags,comments,pictureUrl,
+        recommendRight,reprintRight,appreciationRight,commentRight,property,state
+        ) VALUES (
+        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{comments},#{pictureUrl},
+        #{recommendRight},#{reprintRight},#{appreciationRight},#{commentRight},#{property},#{state}
+        )
+    </insert>
+
+    <delete id="deleteBlogById" parameterType="integer">
+        DELETE FROM blog WHERE id = #{id}
+    </delete>
+
+    <update id="updateViews" parameterType="integer">
+        UPDATE blog SET views = views + 1 WHERE id = #{id}
+    </update>
+
+    <update id="updateBlog" parameterType="Blog">
+        UPDATE blog
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="summary != null">
+                summary = #{summary},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="create_time != null">
+                create_time = #{createTime},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="tags != null">
+                tags = #{tags},
+            </if>
+            <if test="comments != null">
+                comments = #{comments},
+            </if>
+            <if test="pictureUrl != null">
+                pictureUrl = #{pictureUrl},
+            </if>
+            <if test="recommendRight != null">
+                recommendRight = #{recommendRight},
+            </if>
+            <if test="reprintRight != null">
+                reprintRight = #{reprintRight},
+            </if>
+            <if test="appreciationRight != null">
+                appreciationRight = #{appreciationRight},
+            </if>
+            <if test="commentRight != null">
+                commentRight = #{commentRight},
+            </if>
+            <if test="property != null">
+                property = #{property},
+            </if>
+            <if test="state != null">
+                state = #{state}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findBlogById" resultMap="Blog" parameterType="integer">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b WHERE b.id = #{id}
+    </select>
+
+    <select id="findBlogAll" resultMap="Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        ORDER BY b.create_time DESC
+    </select>
+
+    <select id="findBlogByPage" resultMap="Blog" parameterType="integer">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        ORDER BY b.create_time DESC
+        LIMIT #{param1}, #{param2}
+    </select>
+
+    <select id="findBlogByCondition" resultMap="Blog" parameterType="cn.inta.intaddblog.po.Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        WHERE 1 = 1
+        <if test="title != null and title != ''">
+            AND b.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="summary != null and summary != ''">
+            AND b.summary LIKE CONCAT('%', #{summary}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND b.content LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="create_time != null and create_time != ''">
+            AND b.create_time = #{createTime}
+        </if>
+        <if test="type != null and type != ''">
+            AND b.type = #{type}
+        </if>
+        <if test="views != null and views != ''">
+            AND b.views = #{views}
+        </if>
+        <if test="tags != null and tags != ''">
+            AND b.tags LIKE CONCAT('%', #{tags}, '%')
+        </if>
+        <if test="comments != null and comments != ''">
+            AND b.comments = #{comments}
+        </if>
+        <if test="pictureUrl != null and pictureUrl != ''">
+            AND b.pictureUrl LIKE CONCAT('%', #{pictureUrl}, '%')
+        </if>
+        <if test="recommendRight != null and recommendRight != ''">
+            AND b.recommendRight = #{recommendRight}
+        </if>
+        <if test="reprintRight != null and reprintRight != ''">
+            AND b.reprintRight = #{reprintRight}
+        </if>
+        <if test="appreciationRight != null and appreciationRight != ''">
+            AND b.appreciationRight = #{appreciationRight}
+        </if>
+        <if test="commentRight != null and commentRight != ''">
+            AND b.commentRight = #{commentRight}
+        </if>
+        <if test="property != null and property != ''">
+            AND b.property = #{property}
+        </if>
+        <if test="state != null and state != ''">
+            AND b.state = #{state}
+        </if>
+        ORDER BY b.create_time DESC
+        <if test="begin != null and size != null">
+            LIMIT #{begin},#{size}
+        </if>
+    </select>
+
+    <select id="findBlogIDByName" resultType="java.lang.Integer" parameterType="string">
+        SELECT
+        b.id
+        FROM blog b WHERE b.title = #{title}
+    </select>
+
+    <select id="findBlogAllVisible" resultMap="Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        WHERE b.state = 1
+        ORDER BY b.create_time DSEC
+    </select>
+
+    <select id="findRecommendTop" resultMap="Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        ORDER BY b.update_time DESC
+        LIMIT #{num}
+    </select>
+
+    <select id="findGroupYear" resultType="java.lang.String">
+        SELECT
+        date_format(b.update_time, '%Y') as year
+        FROM blog b
+        ORDER BY year DESC
+    </select>
+
+    <select id="findByYear" resultMap="Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b WHERE date_format(b.update_time, '%Y') = #{year}
+        ORDER BY update_time DESC, create_time DESC
+    </select>
+
+
+
+</mapper>

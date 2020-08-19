@@ -2,8 +2,8 @@ package cn.inta.intaddblog.service;
 
 import cn.inta.intaddblog.po.Blog;
 import cn.inta.intaddblog.po.Tag;
-import cn.inta.intaddblog.po.User;
-import cn.inta.intaddblog.vo.BlogHtml;
+import cn.inta.intaddblog.vo.SearchHtml;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -51,6 +51,20 @@ public interface BlogService {
      * @return
      */
     List<Blog> findRecommendTop(Integer num);
+
+    /**
+     * 查询出最近更新的size条blog 其id和标题信息即可
+     * @param num
+     * @return
+     */
+    List<Blog> findUpTimeTop(Integer num);
+
+    /**
+     * 依据查询条件返回博客分页
+     * @param query
+     * @return
+     */
+    List<SearchHtml> findByQuery(String query);
 
     /**
      * 获取归档页中所有博客信息

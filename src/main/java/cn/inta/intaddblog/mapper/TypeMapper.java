@@ -15,6 +15,7 @@ public interface TypeMapper {
 
     Type findByName(String name);
 
+    Type findById(Integer id);
 
 
 //    List<Type> findTop();

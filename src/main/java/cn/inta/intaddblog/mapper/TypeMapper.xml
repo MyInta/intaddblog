@@ -2,14 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.inta.intaddblog.mapper.TypeMapper">
 
+    <resultMap id="Type" type="cn.inta.intaddblog.po.Type">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="introduction" column="introduction"/>
+        <result property="number" column="number"/>
+        <result property="updateTime" column="updateTime"/>
+    </resultMap>
+
     <!-- 表查询字段 -->
     <sql id="allColumns">
         t.id, t.name, t.introduction, t.number, t.updateTime
     </sql>
 
-    <select id="findByName" resultType="cn.inta.intaddblog.po.Type">
+    <select id="findByName" resultMap="Type">
         SELECT
         <include refid="allColumns"/>
         FROM type t WHERE t.name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <select id="findById" resultMap="Type">
+        SELECT
+        <include refid="allColumns"/>
+        FROM type t WHERE t.id = #{id}
     </select>
 </mapper>

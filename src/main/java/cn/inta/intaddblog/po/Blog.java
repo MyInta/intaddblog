@@ -40,8 +40,6 @@ public class Blog {
     private Integer views;
     //标签
     private String tags;
-    //评论
-    private String comments;
     //首图地址
     private String pictureUrl;
     //是否开启推荐

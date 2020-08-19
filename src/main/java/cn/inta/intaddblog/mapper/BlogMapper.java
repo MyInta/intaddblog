@@ -2,6 +2,8 @@ package cn.inta.intaddblog.mapper;
 
 import cn.inta.intaddblog.po.Blog;
 import cn.inta.intaddblog.po.User;
+import cn.inta.intaddblog.vo.SearchHtml;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,11 +18,11 @@ import java.util.Map;
 public interface BlogMapper {
 
     /**
-     * 分页查找
-     * @param map
+     * 查询出最新更新的博客 id和标题即可
+     * @param num
      * @return
      */
-    List<Blog> findTop(Map<String, Object> map);
+    List<Blog> findUpTimeTop(Integer num);
 
     /**
      * 数量统计
@@ -29,12 +31,11 @@ public interface BlogMapper {
     Integer count();
 
     /**
-     * 依据搜索名称，模糊查询博客，返回结果分页
+     * 依据搜索名称，模糊查询博客
      * @param query
-     * @param map
      * @return
      */
-    List<Blog> findByQuery(String query, Map<String, Object> map);
+    List<SearchHtml> findByQuery(String query);
 
 
     /**

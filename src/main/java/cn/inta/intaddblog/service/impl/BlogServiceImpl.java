@@ -6,6 +6,9 @@ import cn.inta.intaddblog.po.Blog;
 import cn.inta.intaddblog.po.Tag;
 import cn.inta.intaddblog.service.BlogService;
 import cn.inta.intaddblog.util.MarkdownUtils;
+import cn.inta.intaddblog.vo.SearchHtml;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +24,6 @@ import java.util.Map;
 @Service
 public class BlogServiceImpl implements BlogService {
 
-//    @Override
-//    public PageInfo<IndexBlog> getBlogByTypeId(Long id, int pageNum, int pageSize) {
-//
-//        PageHelper.startPage(pageNum, pageSize);
-//        List<IndexBlog> list = blogMapper.getBlogByType(id);
-//        PageInfo<IndexBlog> pageInfo = new PageInfo<>(list);
-//        return pageInfo;
-//    }
 
     @Autowired
     public BlogMapper blogMapper;
@@ -67,7 +62,18 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> findRecommendTop(Integer num) {
+
         return null;
+    }
+
+    @Override
+    public List<Blog> findUpTimeTop(Integer num) {
+        return blogMapper.findUpTimeTop(num);
+    }
+
+    @Override
+    public List<SearchHtml> findByQuery(String query) {
+        return blogMapper.findByQuery(query);
     }
 
     @Override

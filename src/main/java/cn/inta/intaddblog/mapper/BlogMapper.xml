@@ -12,7 +12,6 @@
         <result property="type" column="type"/>
         <result property="views" column="views"/>
         <result property="tags" column="tags"/>
-        <result property="comments" column="comments"/>
         <result property="pictureUrl" column="picture_url"/>
         <result property="recommendRight" column="recommend_right"/>
         <result property="reprintRight" column="reprint_right"/>
@@ -23,25 +22,41 @@
         <result property="userId" column="user_id"/>
     </resultMap>
 
+    <resultMap id="SearchHtml" type="cn.inta.intaddblog.vo.SearchHtml">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="type" column="type"/>
+        <result property="views" column="views"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+        <result property="pictureUrl" column="picture_url"/>
+    </resultMap>
+
     <!-- 表查询字段 -->
     <sql id="allColumns">
-        id, title, summary, content, create_time, type, views, tags, comments, picture_url,
+        id, title, summary, content, create_time, update_time, type, views, tags, picture_url,
         recommend_right, reprint_right, appreciation_right, comment_right, property, state, user_id
     </sql>
 
-    <select id="findTop" resultMap="Blog">
-        SELECT <include refid="allColumns"/> FROM blog LIMIT #{page},#{size}
+    <select id="findUpTimeTop" resultMap="Blog">
+        SELECT id, title FROM blog WHERE state = 1 ORDER BY update_time DESC LIMIT #{num}
     </select>
 
     <select id="count" resultType="java.lang.Integer">
         SELECT count(1) FROM blog;
     </select>
 
-    <select id="findByQuery" resultMap="Blog">
-        SELECT b FROM blog b
+    <select id="findByQuery" resultMap="SearchHtml">
+        SELECT
+        b.id, b.title, b.summary, b.update_time, b.views, b.picture_url, u.avatar, u.nickname, t.name type
+        FROM blog b
+        LEFT JOIN user u ON b.user_id = u.id
+        LEFT JOIN type t ON b.type = t.id
         WHERE b.title LIKE CONCAT('%', #{query}, '%')
         OR b.content LIKE CONCAT('%', #{query}, '%')
-        LIMIT #{page},#{size}
+        ORDER BY b.update_time DESC
     </select>
 
     <!--插入博客数据-->
@@ -49,16 +64,16 @@
         INSERT INTO
         <include refid="allColumns"/>
         VALUES (
-        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{comments},#{pictureUrl},
+        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{pictureUrl},
         #{recommendRight},#{reprintRight},#{appreciationRight},#{commentRight},#{property},#{state}
         )
     </insert>
     <insert id="addBlog" parameterType="Blog">
         INSERT INTO blog(
-        id,title,summary,content,create_time,type,views,tags,comments,pictureUrl,
+        id,title,summary,content,create_time,type,views,tags,pictureUrl,
         recommendRight,reprintRight,appreciationRight,commentRight,property,state
         ) VALUES (
-        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{comments},#{pictureUrl},
+        #{id},#{title},#{summary},#{content},#{createTime},#{type},#{views},#{tags},#{pictureUrl},
         #{recommendRight},#{reprintRight},#{appreciationRight},#{commentRight},#{property},#{state}
         )
     </insert>
@@ -94,9 +109,6 @@
             </if>
             <if test="tags != null">
                 tags = #{tags},
-            </if>
-            <if test="comments != null">
-                comments = #{comments},
             </if>
             <if test="pictureUrl != null">
                 pictureUrl = #{pictureUrl},
@@ -169,9 +181,6 @@
         </if>
         <if test="tags != null and tags != ''">
             AND b.tags LIKE CONCAT('%', #{tags}, '%')
-        </if>
-        <if test="comments != null and comments != ''">
-            AND b.comments = #{comments}
         </if>
         <if test="pictureUrl != null and pictureUrl != ''">
             AND b.pictureUrl LIKE CONCAT('%', #{pictureUrl}, '%')

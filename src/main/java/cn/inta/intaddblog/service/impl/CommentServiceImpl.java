@@ -26,8 +26,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<BlogHtmlCommentPart> listCommentByBlogId(Integer blogId) {
-        List<Comment> comments = commentMapper.findByBlogId(blogId);
-        return changeCommentToBlogHtmlCommentPart(comments);
+        List<Comment> commentList = commentMapper.findByBlogId(blogId);
+        return changeCommentToBlogHtmlCommentPart(commentList);
     }
 
     @Override
@@ -36,10 +36,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /*将comment类型转化成blog页面所需类型*/
-    private List<BlogHtmlCommentPart> changeCommentToBlogHtmlCommentPart(List<Comment> comments) {
+    private List<BlogHtmlCommentPart> changeCommentToBlogHtmlCommentPart(List<Comment> commentList) {
         List<BlogHtmlCommentPart> blogHtmlCommentParts = new ArrayList<>();
         Queue<Comment> queue = new LinkedList<>();
-        for (Comment c : comments) {
+        for (Comment c : commentList) {
             //如果是父评论，就进行添加
             if (c.getParentID().equals(-1)) queue.add(c);
         }
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
             BlogHtmlCommentPart bhcp = new BlogHtmlCommentPart();
             List<Comment> children = new ArrayList<>();
             //遍历评论集合，找到父评论id为当前评论id的子评论，进行添加
-            for (Comment c : comments) {
+            for (Comment c : commentList) {
                 if (c.getParentID().equals(temp.getId())) {
                     children.add(c);
                 }

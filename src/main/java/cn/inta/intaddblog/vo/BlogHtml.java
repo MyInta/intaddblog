@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author inta
  * @date 2020/8/17
- * @describe
+ * @describe 用于返回到blog.html的封装类
  */
 @Data
 public class BlogHtml {
@@ -18,6 +18,6 @@ public class BlogHtml {
     private User user;
     private Blog blog;
     private List<Tag> tags;
-    private List<BlogHtmlCommentPart> comments;
+    private List<BlogHtmlCommentPart> blogHtmlCommentParts;
 
 }

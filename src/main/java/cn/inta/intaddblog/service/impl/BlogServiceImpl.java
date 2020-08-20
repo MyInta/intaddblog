@@ -7,8 +7,6 @@ import cn.inta.intaddblog.po.Tag;
 import cn.inta.intaddblog.service.BlogService;
 import cn.inta.intaddblog.util.MarkdownUtils;
 import cn.inta.intaddblog.vo.SearchHtml;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +60,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> findRecommendTop(Integer num) {
-
-        return null;
+        return blogMapper.findRecommendTop(num);
     }
 
     @Override
@@ -119,5 +116,20 @@ public class BlogServiceImpl implements BlogService {
             ids.append(tag.getId());
         }
         return ids.toString();
+    }
+
+    @Override
+    public List<Blog> findBlogByTagId(Integer id) {
+        return blogMapper.findBlogByTagId(id);
+    }
+
+    @Override
+    public List<Blog> findBlogByTypeId(Integer id) {
+        return blogMapper.findBlogByTypeId(id);
+    }
+
+    @Override
+    public List<Blog> findAll() {
+        return blogMapper.findAll();
     }
 }

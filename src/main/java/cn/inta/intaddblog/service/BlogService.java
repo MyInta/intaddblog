@@ -46,7 +46,7 @@ public interface BlogService {
     List<Blog> findBlogByPage(Integer begin, Integer size);
 
     /**
-     * 查询出最近被回复的size条blog
+     * 查询出最新更新的被推荐的size条blog
      * @param num
      * @return
      */
@@ -105,4 +105,24 @@ public interface BlogService {
      * @return
      */
     String tagsToIds(List<Tag> tags);
+
+    /**
+     * 通过标签id查询出所有博客
+     * @param id
+     * @return
+     */
+    List<Blog> findBlogByTagId(Integer id);
+
+    /**
+     * 通过类型id查询出所有博客
+     * @param id
+     * @return
+     */
+    List<Blog> findBlogByTypeId(Integer id);
+
+    /**
+     * 查询出所有博客
+     * @return
+     */
+    List<Blog> findAll();
 }

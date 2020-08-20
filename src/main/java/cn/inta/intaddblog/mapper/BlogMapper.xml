@@ -226,7 +226,7 @@
     <select id="findRecommendTop" resultMap="Blog">
         SELECT
         <include refid="allColumns"/>
-        FROM blog b
+        FROM blog b WHERE b.recommend_right = true
         ORDER BY b.update_time DESC
         LIMIT #{num}
     </select>
@@ -245,6 +245,28 @@
         ORDER BY update_time DESC, create_time DESC
     </select>
 
+    <select id="findBlogByTagId" resultMap="Blog" parameterType="integer">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b WHERE b.id
+        IN (SELECT blog_id FROM blog_tag WHERE tag_id = #{id})
+        ORDER BY update_time DESC
+    </select>
+
+    <select id="findBlogByTypeId" resultMap="Blog" parameterType="integer">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b WHERE b.type = #{id}
+        ORDER BY update_time DESC
+    </select>
+
+
+    <select id="findAll" resultMap="Blog">
+        SELECT
+        <include refid="allColumns"/>
+        FROM blog b
+        ORDER BY update_time DESC
+    </select>
 
 
 </mapper>

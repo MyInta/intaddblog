@@ -35,4 +35,20 @@ public class TagServiceImpl implements TagService {
         }
         return tags;
     }
+
+    @Override
+    public List<Tag> findAll() {
+        return tagMapper.findAll();
+    }
+
+    @Override
+    public List<Tag> findByBlogId(Integer id) {
+        return tagMapper.findByBlogId(id);
+    }
+
+    @Override
+    public List<Tag> findTop(Integer num) {
+        return tagMapper.findTop(num);
+    }
+
 }

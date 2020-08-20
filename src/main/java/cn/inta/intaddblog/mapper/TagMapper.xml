@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.inta.intaddblog.mapper.TagMapper">
-    <select id="findByName" resultType="cn.inta.intaddblog.po.Tag"></select>
-    <select id="findTop" resultType="cn.inta.intaddblog.po.Tag"></select>
 
-    <select id="findById" resultType="cn.inta.intaddblog.po.Tag">
+    <resultMap id="Tag" type="cn.inta.intaddblog.po.Tag">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="number" column="number"/>
+        <result property="updateTime" column="updateTime"/>
+    </resultMap>
+
+    <sql id="allColumn">
+        id, name, number, updateTime
+    </sql>
+
+    <select id="findByName" resultMap="Tag">
+
+    </select>
+
+
+    <select id="findAll" resultMap="Tag">
+        SELECT
+        <include refid="allColumn"/>
+        FROM tag ORDER BY updateTime DESC
+    </select>
+
+    <select id="findById" resultMap="Tag">
         SELECT * FROM tag t WHERE t.id = #{id}
     </select>
+
+    <select id="findByBlogId" resultMap="Tag">
+        SELECT
+        <include refid="allColumn"/>
+        FROM tag t WHERE t.id
+        IN (SELECT tag_id FROM blog_tag WHERE blog_id = #{id})
+    </select>
+
+    <select id="findTop" resultMap="Tag">
+        SELECT
+        <include refid="allColumn"/>
+        FROM tag t ORDER BY updateTime DESC
+        LIMIT #{num}
+    </select>
+
+
 </mapper>

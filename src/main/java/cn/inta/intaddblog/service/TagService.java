@@ -14,4 +14,10 @@ public interface TagService {
     Tag getTagById(Integer id);
 
     List<Tag> getTagsByIds(String tags);
+
+    List<Tag> findAll();
+
+    List<Tag> findByBlogId(Integer id);
+
+    List<Tag> findTop(Integer num);
 }

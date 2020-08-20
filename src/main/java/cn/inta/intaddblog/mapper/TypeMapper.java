@@ -17,6 +17,7 @@ public interface TypeMapper {
 
     Type findById(Integer id);
 
+    List<Type> findAll();
 
-//    List<Type> findTop();
+    List<Type> findTop(Integer num);
 }

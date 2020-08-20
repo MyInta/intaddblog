@@ -1,11 +1,10 @@
 package cn.inta.intaddblog.controller;
 
 import cn.inta.intaddblog.po.Blog;
-import cn.inta.intaddblog.po.Tag;
+import cn.inta.intaddblog.po.Type;
 import cn.inta.intaddblog.po.User;
 import cn.inta.intaddblog.service.*;
-import cn.inta.intaddblog.vo.BlogHtml;
-import cn.inta.intaddblog.vo.BlogHtmlCommentPart;
+import cn.inta.intaddblog.vo.IndexHtml;
 import cn.inta.intaddblog.vo.SearchHtml;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * @author inta
  * @date 2020/8/14
- * @describe
+ * @describe 主页控制器
  */
 @Controller
 public class IndexController {
@@ -32,35 +31,10 @@ public class IndexController {
     private UserService userService;
 
     @Autowired
-    private TagService tagService;
+    private TypeService typeService;
 
     @Autowired
-    private CommentService commentService;
-
-
-    @GetMapping("/blog/{id}")
-    public String blog(@PathVariable Integer id, Model model) {
-        BlogHtml blogHtml = new BlogHtml();
-        Blog blog = blogService.getAndConvert(id);
-        User user = userService.getUserById(blog.getUserId());
-        List<Tag> tags = tagService.getTagsByIds(blog.getTags());
-        List<BlogHtmlCommentPart> blogHtmlCommentParts = commentService.listCommentByBlogId(blog.getId());
-
-        blogHtml.setBlog(blog);
-        blogHtml.setUser(user);
-        blogHtml.setTags(tags);
-        blogHtml.setBlogHtmlCommentParts(blogHtmlCommentParts);
-
-        model.addAttribute("blogHtml", blogHtml);
-        return "blog";
-    }
-
-    @GetMapping("/footer/newblog")
-    public String newBlogs(Model model) {
-        //找到最新提交的三篇博客信息
-        model.addAttribute("newblogs", blogService.findUpTimeTop(3));
-        return "_fragments :: newblogList";
-    }
+    private TagService tagService;
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
     public String search(@RequestParam String query,
@@ -68,16 +42,35 @@ public class IndexController {
         PageHelper.startPage(pageNum, 5);
         List<SearchHtml> searchHtmlList = blogService.findByQuery(query);
         PageInfo<SearchHtml> pageInfo = new PageInfo<>(searchHtmlList);
-
-
-        System.out.println("-----------------" + pageInfo.getList().size() + "listSize");
-        System.out.println("-----------------" + pageInfo.getPages() + "pages");
-
-
+//        System.out.println("-----------------" + pageInfo.getList().size() + "listSize");
+//        System.out.println("-----------------" + pageInfo.getPages() + "pages");
         model.addAttribute("page", pageInfo);
         //用于页面重现中，搜索栏显示之前搜索的内容
         model.addAttribute("query", query);
         return "search";
+    }
+
+    @GetMapping("/")
+    public String index(@RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum, Model model) {
+        PageHelper.startPage(pageNum, 5);
+        List<Blog> blogList = blogService. findAll();
+        PageInfo pageInfo = new PageInfo(blogList);
+        List<IndexHtml> indexHtmls = new ArrayList<>();
+        for (Blog b : blogList) {
+            IndexHtml indexHtml = new IndexHtml();
+            User user = userService.getUserById(b.getUserId());
+            Type type = typeService.getTypeById(b.getType());
+            indexHtml.setBlog(b);
+            indexHtml.setUser(user);
+            indexHtml.setType(type);
+            indexHtmls.add(indexHtml);
+        }
+        pageInfo.setList(indexHtmls);
+        model.addAttribute("page", pageInfo);
+        model.addAttribute("types", typeService.findTop(6));
+        model.addAttribute("tags", tagService.findTop(10));
+        model.addAttribute("recommendBlogs", blogService.findRecommendTop(8));
+        return "index";
     }
 
 }

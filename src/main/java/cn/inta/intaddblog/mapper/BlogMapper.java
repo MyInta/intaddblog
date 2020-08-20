@@ -115,7 +115,7 @@ public interface BlogMapper {
     List<Blog> findBlogAllVisible();
 
     /**
-     * 查询出最近被回复的size条blog
+     * 查询出的size条blog
      * @param num
      * @return
      */
@@ -133,4 +133,10 @@ public interface BlogMapper {
      * @return
      */
     List<Blog> findByYear(String year);
+
+    List<Blog> findBlogByTagId(Integer id);
+
+    List<Blog> findBlogByTypeId(Integer id);
+
+    List<Blog> findAll();
 }

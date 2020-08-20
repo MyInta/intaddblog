@@ -26,4 +26,17 @@
         <include refid="allColumns"/>
         FROM type t WHERE t.id = #{id}
     </select>
+
+    <select id="findAll" resultMap="Type">
+        SELECT
+        <include refid="allColumns"/>
+        FROM type t ORDER BY updateTime DESC
+    </select>
+
+    <select id="findTop" resultMap="Type">
+        SELECT
+        <include refid="allColumns"/>
+        FROM type t ORDER BY updateTime DESC
+        LIMIT #{num}
+    </select>
 </mapper>

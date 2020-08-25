@@ -34,6 +34,18 @@
         <result property="pictureUrl" column="picture_url"/>
     </resultMap>
 
+    <resultMap id="AdminBlogsHtml" type="cn.inta.intaddblog.vo.admin.AdminBlogsHtml">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="recommendRight" column="recommend_right"/>
+        <result property="state" column="state"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="type" javaType="cn.inta.intaddblog.po.Type">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
     <!-- 表查询字段 -->
     <sql id="allColumns">
         id, title, summary, content, create_time, update_time, type, views, tags, picture_url,
@@ -78,6 +90,15 @@
         )
     </insert>
 
+    <insert id="save" parameterType="cn.inta.intaddblog.po.Blog">
+        insert into intaddblog.blog (id, title, summary, content, create_time, update_time, type,
+        views, tags, picture_url, recommend_right, reprint_right, appreciation_right, comment_right,
+        property, state, user_id)
+        values (#{id},#{title},#{summary},#{content},#{createTime},#{updateTime},#{type},#{views},
+        #{tags},#{pictureUrl},#{recommendRight},#{reprintRight},#{appreciationRight},
+        #{commentRight},#{property},#{state},#{userId})
+    </insert>
+
     <delete id="deleteBlogById" parameterType="integer">
         DELETE FROM blog WHERE id = #{id}
     </delete>
@@ -86,7 +107,7 @@
         UPDATE blog SET views = views + 1 WHERE id = #{id}
     </update>
 
-    <update id="updateBlog" parameterType="Blog">
+    <update id="updateBlog" parameterType="cn.inta.intaddblog.po.Blog">
         UPDATE blog
         <set>
             <if test="title != null">
@@ -98,8 +119,11 @@
             <if test="content != null">
                 content = #{content},
             </if>
-            <if test="create_time != null">
+            <if test="createTime != null">
                 create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
             </if>
             <if test="type != null">
                 `type` = #{type},
@@ -111,28 +135,31 @@
                 tags = #{tags},
             </if>
             <if test="pictureUrl != null">
-                pictureUrl = #{pictureUrl},
+                picture_url = #{pictureUrl},
             </if>
             <if test="recommendRight != null">
-                recommendRight = #{recommendRight},
+                recommend_right = #{recommendRight},
             </if>
             <if test="reprintRight != null">
-                reprintRight = #{reprintRight},
+                reprint_right = #{reprintRight},
             </if>
             <if test="appreciationRight != null">
-                appreciationRight = #{appreciationRight},
+                appreciation_right = #{appreciationRight},
             </if>
             <if test="commentRight != null">
-                commentRight = #{commentRight},
+                comment_right = #{commentRight},
             </if>
             <if test="property != null">
                 property = #{property},
             </if>
             <if test="state != null">
-                state = #{state}
+                state = #{state},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId}
             </if>
         </set>
-        WHERE id = #{id}
+        WHERE id = #{id};
     </update>
 
     <select id="findBlogById" resultMap="Blog" parameterType="integer">
@@ -170,7 +197,7 @@
         <if test="content != null and content != ''">
             AND b.content LIKE CONCAT('%', #{content}, '%')
         </if>
-        <if test="create_time != null and create_time != ''">
+        <if test="createTime != null and createTime != ''">
             AND b.create_time = #{createTime}
         </if>
         <if test="type != null and type != ''">
@@ -183,19 +210,19 @@
             AND b.tags LIKE CONCAT('%', #{tags}, '%')
         </if>
         <if test="pictureUrl != null and pictureUrl != ''">
-            AND b.pictureUrl LIKE CONCAT('%', #{pictureUrl}, '%')
+            AND b.picture_url LIKE CONCAT('%', #{pictureUrl}, '%')
         </if>
         <if test="recommendRight != null and recommendRight != ''">
-            AND b.recommendRight = #{recommendRight}
+            AND b.recommend_right = #{recommendRight}
         </if>
         <if test="reprintRight != null and reprintRight != ''">
-            AND b.reprintRight = #{reprintRight}
+            AND b.reprint_right = #{reprintRight}
         </if>
         <if test="appreciationRight != null and appreciationRight != ''">
-            AND b.appreciationRight = #{appreciationRight}
+            AND b.appreciation_right = #{appreciationRight}
         </if>
         <if test="commentRight != null and commentRight != ''">
-            AND b.commentRight = #{commentRight}
+            AND b.comment_right = #{commentRight}
         </if>
         <if test="property != null and property != ''">
             AND b.property = #{property}
@@ -265,6 +292,13 @@
         SELECT
         <include refid="allColumns"/>
         FROM blog b
+        ORDER BY update_time DESC
+    </select>
+
+    <select id="findAdminBlog" resultMap="AdminBlogsHtml">
+        SELECT
+        b.id, b.title, t.id, t.name, b.recommend_right, b.state, b.update_time
+        FROM blog b JOIN type t ON b.type = t.id
         ORDER BY update_time DESC
     </select>
 

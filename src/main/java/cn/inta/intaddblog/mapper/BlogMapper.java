@@ -1,9 +1,8 @@
 package cn.inta.intaddblog.mapper;
 
 import cn.inta.intaddblog.po.Blog;
-import cn.inta.intaddblog.po.User;
 import cn.inta.intaddblog.vo.SearchHtml;
-import com.github.pagehelper.PageInfo;
+import cn.inta.intaddblog.vo.admin.AdminBlogsHtml;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -71,7 +70,7 @@ public interface BlogMapper {
      * @param blog
      * @return
      */
-    Blog updateBlog(Blog blog);
+    Integer updateBlog(Blog blog);
 
     /**
      * 依据博客id查询博客
@@ -139,4 +138,8 @@ public interface BlogMapper {
     List<Blog> findBlogByTypeId(Integer id);
 
     List<Blog> findAll();
+
+    List<AdminBlogsHtml> findAdminBlog();
+
+    Integer save(Blog blog);
 }

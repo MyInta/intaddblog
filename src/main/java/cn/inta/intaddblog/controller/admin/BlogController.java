@@ -1,15 +1,22 @@
 package cn.inta.intaddblog.controller.admin;
 
 import cn.inta.intaddblog.po.Blog;
+import cn.inta.intaddblog.po.Type;
+import cn.inta.intaddblog.po.User;
 import cn.inta.intaddblog.service.BlogService;
+import cn.inta.intaddblog.service.TagService;
+import cn.inta.intaddblog.service.TypeService;
+import cn.inta.intaddblog.vo.admin.AdminBlogsHtml;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @author inta
@@ -26,28 +33,52 @@ public class BlogController {
     /*博客列表界面*/
     private static final String LIST = "admin/blogs";
     //重定向到博客列表界面
-    private static final String REDIRECT_LIST = "admin/blogs-input";
+    private static final String REDIRECT_LIST = "redirect:/admin/blogs";
 
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private TypeService typeService;
+
+    @Autowired
+    private TagService tagService;
+
     @GetMapping("/blogs")
-    public String blogs(Model model) {
-//        model.addAttribute("types", typeService.listType());
-        model.addAttribute("page", blogService.archiveBlog());
+    public String blogs(@RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum, Model model) {
+        //这边写死了，后续可以调整
+        PageHelper.startPage(pageNum, 8);
+        List<AdminBlogsHtml> blogList = blogService.adminBlog();
+        PageInfo pageInfo = new PageInfo(blogList);
+        List<Type> types = typeService.findAll();
+        model.addAttribute("types", types);
+        model.addAttribute("page", pageInfo);
         return LIST;
     }
 
+    /**
+     *
+     * @param pageNum
+     * @param model
+     * @return 返回到后台博客管理页面的博客展示部分
+     */
     @PostMapping("/blogs/search")
-    public String search(Blog blog, Model model) {
-        model.addAttribute("page", blogService.findBlogByCondition(blog));
+    public String search(@RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum, Model model) {
+        PageHelper.startPage(pageNum, 8);
+        List<AdminBlogsHtml> blogList = blogService.adminBlog();
+        PageInfo pageInfo = new PageInfo(blogList);
+        model.addAttribute("page", pageInfo);
         return "admin/blogs :: blogList";
     }
 
 
+    /**
+     * 添加类型和标签
+     * @param model
+     */
     private void setTypeAndTag(Model model) {
-//        model.addAttribute("types", typeService.listType());
-//        model.addAttribute("tags", tagService.listTag());
+        model.addAttribute("types", typeService.findAll());
+        model.addAttribute("tags", tagService.findAll());
     }
 
     @GetMapping("/blogs/input")
@@ -65,6 +96,27 @@ public class BlogController {
         return INPUT;
     }
 
+    @PostMapping("/blogs")
+    public String post(Blog blog, RedirectAttributes attributes, HttpSession session) {
+        User curUser = (User) session.getAttribute("user");
+        //设置用户id
+        blog.setUserId(curUser.getId());
+        //设置blog的type属性（type的id）
+        blog.setType(typeService.getTypeById(blog.getType()).getId());
+        Integer b;
+        if (blog.getId() == null) {
+            b = blogService.saveBlog(blog);
+        } else {
+            b = blogService.updateBlog(blog.getId(), blog);
+        }
+
+        if(b.equals(0)){
+            attributes.addFlashAttribute("message", "操作失败");
+        }else {
+            attributes.addFlashAttribute("message", "操作成功");
+        }
+        return REDIRECT_LIST;
+    }
 
     /**
      * 依据id删除博客

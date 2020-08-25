@@ -49,12 +49,12 @@
   <div  class="m-container m-padded-tb-big">
     <div class="ui container">
       <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" method="post" class="ui form">
-        <input type="hidden" name="published" th:value="*{published}">
+        <input type="hidden" name="state" th:value="*{state}">
         <input type="hidden" name="id" th:value="*{id}">
         <div class="required field">
           <div class="ui left labeled input">
             <div class="ui selection compact teal basic dropdown label">
-              <input type="hidden" value="原创" name="flag" th:value="*{flag}" >
+              <input type="hidden" value="原创" name="property" th:value="*{property}" >
               <i class="dropdown icon"></i>
               <div class="text">原创</div>
               <div class="menu">
@@ -78,7 +78,7 @@
             <div class="ui left labeled action input">
               <label class="ui compact teal basic label">分类</label>
               <div class="ui fluid selection dropdown">
-                <input type="hidden" name="type.id" th:value="*{type}!=null ? *{type.id}">
+                <input type="hidden" name="type" th:value="*{type}">
                 <i class="dropdown icon"></i>
                 <div class="default text">分类</div>
                 <div class="menu">
@@ -91,7 +91,7 @@
             <div class="ui left labeled action input">
               <label class="ui compact teal basic label">标签</label>
               <div class="ui fluid selection multiple search  dropdown">
-                <input type="hidden" name="tagIds" th:value="*{tagIds}" >
+                <input type="hidden" name="tags" th:value="*{tags}" >
                 <i class="dropdown icon"></i>
                 <div class="default text">标签</div>
                 <div class="menu">
@@ -105,37 +105,37 @@
         <div class="required field">
           <div class="ui left labeled input">
             <label class="ui teal basic label">首图</label>
-            <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="首图引用地址">
+            <input type="text" name="pictureUrl" th:value="*{pictureUrl}" placeholder="首图引用地址">
           </div>
         </div>
 
         <div class="required field">
-          <textarea name="description" th:text="*{description}" placeholder="博客描述..." maxlength="200"></textarea>
+          <textarea name="summary" th:text="*{summary}" placeholder="博客描述..." maxlength="200"></textarea>
         </div>
 
         <div class="inline fields">
           <div class="field">
             <div class="ui checkbox">
-              <input type="checkbox" id="recommend" name="recommend" checked th:checked="*{recommend}" class="hidden">
-              <label for="recommend">推荐</label>
+              <input type="checkbox" id="recommendRight" name="recommendRight" checked th:checked="*{recommendRight}" class="hidden">
+              <label for="recommendRight">推荐</label>
             </div>
           </div>
           <div class="field">
             <div class="ui checkbox">
-              <input type="checkbox" id="shareStatement" name="shareStatement" th:checked="*{shareStatement}" class="hidden">
-              <label for="shareStatement">转载声明</label>
+              <input type="checkbox" id="reprintRight" name="reprintRight" th:checked="*{reprintRight}" class="hidden">
+              <label for="reprintRight">转载声明</label>
             </div>
           </div>
           <div class="field">
             <div class="ui checkbox">
-              <input type="checkbox" id="appreciation" name="appreciation" th:checked="*{appreciation}" class="hidden">
-              <label for="appreciation">赞赏</label>
+              <input type="checkbox" id="appreciationRight" name="appreciationRight" th:checked="*{appreciationRight}" class="hidden">
+              <label for="appreciationRight">赞赏</label>
             </div>
           </div>
           <div class="field">
             <div class="ui checkbox">
-              <input type="checkbox" id="commentabled" name="commentabled" th:checked="*{commentabled}" class="hidden">
-              <label for="commentabled">评论</label>
+              <input type="checkbox" id="commentRight" name="commentRight" th:checked="*{commentRight}" class="hidden">
+              <label for="commentRight">评论</label>
             </div>
           </div>
         </div>
@@ -206,10 +206,11 @@
         width   : "100%",
         height  : 640,
         syncScrolling : "single",
-//        path    : "../static/lib/editormd/lib/"
         path    : "/lib/editormd/lib/"
       });
     });
+
+
     $('.menu.toggle').click(function () {
       $('.m-item').toggleClass('m-mobile-hide');
     });
@@ -219,16 +220,15 @@
     });
 
     $('#save-btn').click(function () {
-      $('[name="published"]').val(false);
+      $('[name="state"]').val(false);
       $('#blog-form').submit();
     });
 
 
     $('#publish-btn').click(function () {
-      $('[name="published"]').val(true);
+      $('[name="state"]').val(true);
       $('#blog-form').submit();
     });
-
 
 
     $('.ui.form').form({
@@ -248,21 +248,21 @@
           }]
         },
         typeId : {
-          identifier: 'type.id',
+          identifier: 'type',
           rules: [{
             type : 'empty',
             prompt: '标题：请输入博客分类'
           }]
         },
-        firstPicture : {
-          identifier: 'firstPicture',
+        pictureUrl : {
+          identifier: 'pictureUrl',
           rules: [{
             type : 'empty',
             prompt: '标题：请输入博客首图'
           }]
         },
-        description : {
-          identifier: 'description',
+        summary : {
+          identifier: 'summary',
           rules: [{
             type : 'empty',
             prompt: '标题：请输入博客描述'

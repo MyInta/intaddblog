@@ -7,9 +7,11 @@ import cn.inta.intaddblog.po.Tag;
 import cn.inta.intaddblog.service.BlogService;
 import cn.inta.intaddblog.util.MarkdownUtils;
 import cn.inta.intaddblog.vo.SearchHtml;
+import cn.inta.intaddblog.vo.admin.AdminBlogsHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,13 +91,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog addBlog(Blog blog) {
-        return null;
-    }
-
-    @Override
-    public Blog updateBlog(Integer id, Blog blog) {
-        return null;
+    public Integer updateBlog(Integer id, Blog blog) {
+        Blog b = blogMapper.findBlogById(id);
+        //如果没有该id的博客，就直接返回0表示失败
+        if (b == null) return 0;
+        blog.setUpdateTime(new Date());
+        return blogMapper.updateBlog(blog);
     }
 
     @Override
@@ -132,4 +133,15 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> findAll() {
         return blogMapper.findAll();
     }
+
+    @Override
+    public List<AdminBlogsHtml> adminBlog() {
+        return blogMapper.findAdminBlog();
+    }
+
+    @Override
+    public Integer saveBlog(Blog blog) {
+        return blogMapper.save(blog);
+    }
+
 }

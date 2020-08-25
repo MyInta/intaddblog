@@ -3,7 +3,7 @@ package cn.inta.intaddblog.service;
 import cn.inta.intaddblog.po.Blog;
 import cn.inta.intaddblog.po.Tag;
 import cn.inta.intaddblog.vo.SearchHtml;
-import com.github.pagehelper.PageInfo;
+import cn.inta.intaddblog.vo.admin.AdminBlogsHtml;
 
 import java.util.List;
 import java.util.Map;
@@ -79,19 +79,12 @@ public interface BlogService {
     Integer blogNum();
 
     /**
-     * 添加博客
-     * @param blog
-     * @return
-     */
-    Blog addBlog(Blog blog);
-
-    /**
      * 依据id更新博客
      * @param id
      * @param blog
      * @return
      */
-    Blog updateBlog(Integer id, Blog blog);
+    Integer updateBlog(Integer id, Blog blog);
 
     /**
      * 依据id删除博客
@@ -125,4 +118,17 @@ public interface BlogService {
      * @return
      */
     List<Blog> findAll();
+
+    /**
+     * 查询除后台管理博客所需字段
+     * @return
+     */
+    List<AdminBlogsHtml> adminBlog();
+
+    /**
+     * 新增博客
+     * @param blog
+     * @return
+     */
+    Integer saveBlog(Blog blog);
 }

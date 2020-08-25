@@ -46,6 +46,8 @@
 
 5、控制器命名即使在不同包下，也要避免重复，否则在加载bean的时候会冲突报错
 
+6、mapper语句中，标签之间拼接时候，留意有时候字段之间漏了个逗号，导致的bad sql，另外一个很蠢的问题就别再犯了，update、insert、delete等语句不需要返回特定类型
+
 
 
 
@@ -68,8 +70,8 @@
 >
 > ```yml
 > mybatis:
->   configuration:
->     call-setters-on-nulls: true #设置返回字段不为空，前端不报错
+> configuration:
+>  call-setters-on-nulls: true #设置返回字段不为空，前端不报错
 > ```
 >
 > 第二种方法，我的项目中实施的方式：修改前端页面，进行th:if判断字段不为空，包裹评论区
@@ -87,9 +89,9 @@
 >
 > ```xml
 > <dependency>
->     <groupId>com.github.pagehelper</groupId>
->     <artifactId>pagehelper-spring-boot-starter</artifactId>
->     <version>1.2.12</version>
+>  <groupId>com.github.pagehelper</groupId>
+>  <artifactId>pagehelper-spring-boot-starter</artifactId>
+>  <version>1.2.12</version>
 > </dependency>
 > ```
 >
@@ -97,9 +99,9 @@
 >
 > <!--pagehelper分页工具-->
 > <dependency>
->     <groupId>com.github.pagehelper</groupId>
->     <artifactId>pagehelper</artifactId>
->     <version>5.1.10</version>
+>  <groupId>com.github.pagehelper</groupId>
+>  <artifactId>pagehelper</artifactId>
+>  <version>5.1.10</version>
 > </dependency>
 >
 > 需要添加一个拦截器，来使得pagehelper的拦截生效，从而修改sql语句
@@ -107,6 +109,8 @@
 > 11、搜索页面search分页之后，上下页进行跳转失败，原因在于控制器一开始限制请求方式为POST，而我前端页面上下页跳转使用的链接拼接方式，放开GET请求，并把query查询字段以及页码pageNum传递即能正常跳转了。
 >
 > 12、后续优化，页面显示的上下页处，表明是第几页
+>
+> 13、页面展示时间为英文格式 如（Sat Sep 26 01:10:50 CST 2020）而非（2020-9-26 01:10:50），可以使用${#dates.format(adminBlogsHtml.updateTime,'yyyy-MM-dd HH:mm')}进行转化
 
 
 

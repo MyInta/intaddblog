@@ -53,7 +53,7 @@ public class Blog {
     //属性（1原创、2转载、3翻译）
     private Integer property;
     //状态（0草稿、1已发布）
-    private Integer state;
+    private Boolean state;
     //博客隶属的用户id信息
     private Integer userId;
 

@@ -20,4 +20,14 @@ public interface TypeMapper {
     List<Type> findAll();
 
     List<Type> findTop(Integer num);
+
+    String findIntroductionById(Integer id);
+
+    Integer save(Type type);
+
+    Integer findNumberById(Integer id);
+
+    Integer update(Type type);
+
+    void deleteById(Integer id);
 }

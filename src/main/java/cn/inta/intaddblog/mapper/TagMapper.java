@@ -28,4 +28,15 @@ public interface TagMapper {
 
     /*查询出num数量的最新更新的标签*/
     List<Tag> findTop(Integer num);
+
+    /*保存tag信息*/
+    Integer save(Tag tag);
+
+    /*通过id删除标签*/
+    void deleteById(Integer id);
+
+    /*通过id更新标签*/
+    Integer update(Tag tag);
+
+    Integer getNumById(Integer id);
 }

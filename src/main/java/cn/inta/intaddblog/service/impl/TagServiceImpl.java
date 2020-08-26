@@ -51,4 +51,29 @@ public class TagServiceImpl implements TagService {
         return tagMapper.findTop(num);
     }
 
+    @Override
+    public Tag getTagByName(String name) {
+        return tagMapper.findByName(name);
+    }
+
+    @Override
+    public Integer saveTag(Tag tag) {
+        return tagMapper.save(tag);
+    }
+
+    @Override
+    public Integer updateTag(Tag tag) {
+        return tagMapper.update(tag);
+    }
+
+    @Override
+    public void deleteTag(Integer id) {
+        tagMapper.deleteById(id);
+    }
+
+    @Override
+    public Integer getNumById(Integer id) {
+        return tagMapper.getNumById(id);
+    }
+
 }

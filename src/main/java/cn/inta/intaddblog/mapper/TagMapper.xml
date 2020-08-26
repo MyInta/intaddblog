@@ -13,8 +13,24 @@
         id, name, number, updateTime
     </sql>
 
-    <select id="findByName" resultMap="Tag">
+    <insert id="save">
+        INSERT INTO intaddblog.tag (id, name, number, updateTime)
+        VALUES (#{id}, #{name}, #{number}, #{updateTime})
+    </insert>
 
+    <update id="update" parameterType="cn.inta.intaddblog.po.Tag">
+        UPDATE tag SET name = #{name}, number = #{number}, updateTime = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="integer">
+        DELETE FROM tag WHERE id = #{id}
+    </delete>
+
+    <select id="findByName" resultMap="Tag">
+        SELECT
+        <include refid="allColumn"/>
+        FROM tag t WHERE t.name = #{name}
     </select>
 
 
@@ -25,7 +41,9 @@
     </select>
 
     <select id="findById" resultMap="Tag">
-        SELECT * FROM tag t WHERE t.id = #{id}
+        SELECT
+        <include refid="allColumn"/>
+        FROM tag t WHERE t.id = #{id}
     </select>
 
     <select id="findByBlogId" resultMap="Tag">
@@ -40,6 +58,10 @@
         <include refid="allColumn"/>
         FROM tag t ORDER BY updateTime DESC
         LIMIT #{num}
+    </select>
+
+    <select id="getNumById" resultType="java.lang.Integer">
+        SELECT number FROM tag WHERE id = #{id}
     </select>
 
 

@@ -20,4 +20,14 @@ public interface TagService {
     List<Tag> findByBlogId(Integer id);
 
     List<Tag> findTop(Integer num);
+
+    Tag getTagByName(String name);
+
+    Integer saveTag(Tag tag);
+
+    Integer updateTag(Tag tag);
+
+    void deleteTag(Integer id);
+
+    Integer getNumById(Integer id);
 }

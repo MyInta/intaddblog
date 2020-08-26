@@ -15,6 +15,20 @@
         t.id, t.name, t.introduction, t.number, t.updateTime
     </sql>
 
+    <insert id="save">
+        INSERT INTO intaddblog.type (id, name, introduction, number, updateTime)
+        VALUES (#{id}, #{name}, #{introduction}, #{number}, #{updateTime})
+    </insert>
+
+    <update id="update" parameterType="cn.inta.intaddblog.po.Type">
+        UPDATE type SET name = #{name}, number = #{number}, introduction = #{introduction}, updateTime = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM type WHERE id = #{id}
+    </delete>
+
     <select id="findByName" resultMap="Type">
         SELECT
         <include refid="allColumns"/>
@@ -38,5 +52,13 @@
         <include refid="allColumns"/>
         FROM type t ORDER BY updateTime DESC
         LIMIT #{num}
+    </select>
+
+    <select id="findIntroductionById" resultType="java.lang.String">
+        SELECT introduction FROM type WHERE id = #{id}
+    </select>
+
+    <select id="findNumberById" resultType="java.lang.Integer">
+        SELECT number FROM type WHERE id = #{id}
     </select>
 </mapper>

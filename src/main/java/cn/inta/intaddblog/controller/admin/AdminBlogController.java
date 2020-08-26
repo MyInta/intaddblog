@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-public class BlogController {
+public class AdminBlogController {
 
     //定义一些常量方便使用
     /*博客内容输入管理页面地址*/
